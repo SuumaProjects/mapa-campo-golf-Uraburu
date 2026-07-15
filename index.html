@@ -27,7 +27,7 @@
     }
 
     html, body {
-      height: auto;
+      height: 100%;
       margin: 0;
       background: #f6f4ef;
       color: var(--ink);
@@ -38,6 +38,8 @@
     body {
       position: relative;
       width: 100%;
+      height: 100dvh;
+      overflow: hidden;
     }
 
 
@@ -54,8 +56,8 @@
 
     #map {
       width: 100%;
-      height: min(665px, calc(100dvh - 190px));
-      min-height: 560px;
+      height: 100dvh;
+      min-height: 0;
       background: #d7d3c8;
     }
 
@@ -113,7 +115,7 @@
       position: absolute;
       left: 10px;
       right: 10px;
-      bottom: calc(34px + env(safe-area-inset-bottom));
+      bottom: calc(285px + env(safe-area-inset-bottom));
       z-index: 1000;
       background: var(--card);
       border: 1px solid rgba(255,255,255,.78);
@@ -300,7 +302,7 @@
       .eyebrow { font-size: 9px; margin-bottom: 1px; }
       .top-title { font-size: 18px; }
       .top-subtitle { font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-      .panel { bottom: calc(30px + env(safe-area-inset-bottom)); left: 10px; right: 10px; }
+      .panel { bottom: calc(265px + env(safe-area-inset-bottom)); left: 10px; right: 10px; }
       .panel-inner { padding: 8px 11px 9px; gap: 5px; }
       .nearest-title { font-size: 16px; }
       .nearest-desc { display: none; }
@@ -313,7 +315,8 @@
 
     @media (max-height: 590px) {
       .top-card { display: none; }
-      #map { height: min(590px, calc(100dvh - 170px)); min-height: 500px; }
+      #map { height: 100dvh; min-height: 0; }
+      .panel { bottom: calc(210px + env(safe-area-inset-bottom)); }
       .leaflet-control-zoom { margin-top: 10px !important; }
     }
   </style>
