@@ -62,7 +62,7 @@
     }
 
     .top-card {
-      position: absolute;
+      position: fixed;
       top: max(8px, env(safe-area-inset-top));
       left: 10px;
       right: 10px;
@@ -112,10 +112,10 @@
     }
 
     .panel {
-      position: absolute;
+      position: fixed;
       left: 10px;
       right: 10px;
-      bottom: calc(285px + env(safe-area-inset-bottom));
+      bottom: calc(34px + env(safe-area-inset-bottom));
       z-index: 1000;
       background: var(--card);
       border: 1px solid rgba(255,255,255,.78);
@@ -302,7 +302,7 @@
       .eyebrow { font-size: 9px; margin-bottom: 1px; }
       .top-title { font-size: 18px; }
       .top-subtitle { font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-      .panel { bottom: calc(265px + env(safe-area-inset-bottom)); left: 10px; right: 10px; }
+      .panel { bottom: calc(30px + env(safe-area-inset-bottom)); left: 10px; right: 10px; }
       .panel-inner { padding: 8px 11px 9px; gap: 5px; }
       .nearest-title { font-size: 16px; }
       .nearest-desc { display: none; }
@@ -316,7 +316,7 @@
     @media (max-height: 590px) {
       .top-card { display: none; }
       #map { height: 100dvh; min-height: 0; }
-      .panel { bottom: calc(210px + env(safe-area-inset-bottom)); }
+      .panel { bottom: calc(26px + env(safe-area-inset-bottom)); }
       .leaflet-control-zoom { margin-top: 10px !important; }
     }
   </style>
