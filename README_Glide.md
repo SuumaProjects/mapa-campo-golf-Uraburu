@@ -1,15 +1,13 @@
-# Mapa Campo Uraburu - v=uraburu8
+# Mapa de campo Uraburu - ajuste final altura/popup
 
-Versión ajustada para Glide móvil.
+Este paquete contiene el `index.html` para GitHub Pages con las coordenadas corregidas de Uraburu y el ajuste solicitado:
 
-Cambios respecto a la versión anterior:
-- El mapa vuelve a ocupar toda la altura disponible del iframe: `height: 100dvh`.
-- Se elimina la franja blanca inferior visible bajo el mapa.
-- El popup inferior se eleva dentro del mapa para quedar visible sobre la navegación inferior de Glide.
-- Se mantienen las coordenadas corregidas de Uraburu y la estructura visual validada.
+- Altura del mapa reducida: `height: 650px; max-height: calc(100dvh - 175px);`
+- Popup inferior anclado al borde inferior del mapa: `.panel { position: absolute; bottom: 10px; }`
+- En móvil se mantiene la misma lógica para evitar que el popup quede fuera de pantalla.
 
 URL de prueba:
-https://suumaprojects.github.io/mapa-campo-golf-Uraburu/?lang=es&v=uraburu8
+`https://suumaprojects.github.io/mapa-campo-golf-Uraburu/?lang=es&v=uraburu10`
 
 URL Glide:
-https://suumaprojects.github.io/mapa-campo-golf-Uraburu/?lang=User_Language&v=uraburu8
+`https://suumaprojects.github.io/mapa-campo-golf-Uraburu/?lang=User_Language&v=uraburu10`
