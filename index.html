@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- ReadyStroke MAP Uraburu - popup visible ajustado para Glide movil -->
+<!-- ReadyStroke MAP Meaztegi - version popup-safe1: panel inferior visible por encima del menú Glide -->
 <html lang="es">
 <head>
   <meta charset="utf-8" />
@@ -32,13 +32,6 @@
       background: #f6f4ef;
       color: var(--ink);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      overflow: hidden;
-    }
-
-    body {
-      position: relative;
-      width: 100%;
-      height: 100dvh;
       overflow: hidden;
     }
 
@@ -355,27 +348,153 @@
 
 <script>
 const POINTS = [
-  { hole: 1, type: "TEE", label: "H1", lat: 43.25035260949809, lng: -2.8381257955666372 },
-  { hole: 2, type: "TEE", label: "H2", lat: 43.2489310656639, lng: -2.840065337749178 },
-  { hole: 3, type: "TEE", label: "H3", lat: 43.24956590068041, lng: -2.8412859874033587 },
-  { hole: 4, type: "TEE", label: "H4", lat: 43.24999026303395, lng: -2.8451935346697534 },
-  { hole: 5, type: "TEE", label: "H5", lat: 43.250447546734826, lng: -2.8400378826461066 },
-  { hole: 6, type: "TEE", label: "H6", lat: 43.25110602924869, lng: -2.845170933172965 },
-  { hole: 7, type: "TEE", label: "H7", lat: 43.25188888251861, lng: -2.8449298505780836 },
-  { hole: 8, type: "TEE", label: "H8", lat: 43.253893526325655, lng: -2.845979564460534 },
-  { hole: 9, type: "TEE", label: "H9", lat: 43.2526131957403, lng: -2.843664166872169 },
-  { hole: 10, type: "TEE", label: "H10", lat: 43.249587231017244, lng: -2.8330092579265123 },
-  { hole: 11, type: "TEE", label: "H11", lat: 43.24776745602338, lng: -2.829037305511522 },
-  { hole: 12, type: "TEE", label: "H12", lat: 43.24485932282394, lng: -2.822925149492033 },
-  { hole: 13, type: "TEE", label: "H13", lat: 43.24286314653905, lng: -2.822620668628631 },
-  { hole: 14, type: "TEE", label: "H14", lat: 43.24505776809765, lng: -2.821539174195871 },
-  { hole: 15, type: "TEE", label: "H15", lat: 43.24329958403818, lng: -2.824061168431941 },
-  { hole: 16, type: "TEE", label: "H16", lat: 43.245256079370485, lng: -2.8265566547547194 },
-  { hole: 17, type: "TEE", label: "H17", lat: 43.24394279744801, lng: -2.8299848824017344 },
-  { hole: 18, type: "TEE", label: "H18", lat: 43.24583882281844, lng: -2.8273300859543053 },
-  { hole: null, type: "WC", label: "WC", lat: 43.251302123591074, lng: -2.845175194124546 },
-  { hole: null, type: "CLUBHOUSE", label: "CC", lat: 43.25118548558018, lng: -2.8377474672775276 },
-  { hole: null, type: "PRACTICE", label: "CP", lat: 43.25021268504078, lng: -2.8366998183198717 }
+  {
+    "hole": 1,
+    "type": "TEE",
+    "label": "H1",
+    "lat": 43.25035260949809,
+    "lng": -2.8381257955666372
+  },
+  {
+    "hole": 2,
+    "type": "TEE",
+    "label": "H2",
+    "lat": 43.2489310656639,
+    "lng": -2.840065337749178
+  },
+  {
+    "hole": 3,
+    "type": "TEE",
+    "label": "H3",
+    "lat": 43.24956590068041,
+    "lng": -2.8412859874033587
+  },
+  {
+    "hole": 4,
+    "type": "TEE",
+    "label": "H4",
+    "lat": 43.24999026303395,
+    "lng": -2.8451935346697534
+  },
+  {
+    "hole": 5,
+    "type": "TEE",
+    "label": "H5",
+    "lat": 43.250447546734826,
+    "lng": -2.8400378826461066
+  },
+  {
+    "hole": 6,
+    "type": "TEE",
+    "label": "H6",
+    "lat": 43.25110602924869,
+    "lng": -2.845170933172965
+  },
+  {
+    "hole": 7,
+    "type": "TEE",
+    "label": "H7",
+    "lat": 43.25188888251861,
+    "lng": -2.8449298505780836
+  },
+  {
+    "hole": 8,
+    "type": "TEE",
+    "label": "H8",
+    "lat": 43.253893526325655,
+    "lng": -2.845979564460534
+  },
+  {
+    "hole": 9,
+    "type": "TEE",
+    "label": "H9",
+    "lat": 43.2526131957403,
+    "lng": -2.843664166872169
+  },
+  {
+    "hole": 10,
+    "type": "TEE",
+    "label": "H10",
+    "lat": 43.249587231017244,
+    "lng": -2.8330092579265123
+  },
+  {
+    "hole": 11,
+    "type": "TEE",
+    "label": "H11",
+    "lat": 43.24776745602338,
+    "lng": -2.829037305511522
+  },
+  {
+    "hole": 12,
+    "type": "TEE",
+    "label": "H12",
+    "lat": 43.24485932282394,
+    "lng": -2.822925149492033
+  },
+  {
+    "hole": 13,
+    "type": "TEE",
+    "label": "H13",
+    "lat": 43.24286314653905,
+    "lng": -2.822620668628631
+  },
+  {
+    "hole": 14,
+    "type": "TEE",
+    "label": "H14",
+    "lat": 43.24505776809765,
+    "lng": -2.821539174195871
+  },
+  {
+    "hole": 15,
+    "type": "TEE",
+    "label": "H15",
+    "lat": 43.24329958403818,
+    "lng": -2.824061168431941
+  },
+  {
+    "hole": 16,
+    "type": "TEE",
+    "label": "H16",
+    "lat": 43.245256079370485,
+    "lng": -2.8265566547547194
+  },
+  {
+    "hole": 17,
+    "type": "TEE",
+    "label": "H17",
+    "lat": 43.24394279744801,
+    "lng": -2.8299848824017344
+  },
+  {
+    "hole": 18,
+    "type": "TEE",
+    "label": "H18",
+    "lat": 43.24583882281844,
+    "lng": -2.8273300859543053
+  },
+  {
+    "hole": null,
+    "type": "WC",
+    "label": "WC",
+    "lat": 43.24997700155981,
+    "lng": -2.8452251034105203
+  },
+  {
+    "hole": null,
+    "type": "PRACTICE",
+    "label": "CP",
+    "lat": 43.25017238427627,
+    "lng": -2.836714418674854
+  },
+  {
+    "hole": null,
+    "type": "CLUBHOUSE",
+    "label": "CC",
+    "lat": 43.25115764806367, 
+    "lng": -2.837870479052072
+  }
 ];
 
 const TRANSLATIONS = {
@@ -676,4 +795,3 @@ document.getElementById('navBtn').addEventListener('click', () => {
 document.getElementById('fitBtn').addEventListener('click', fitCourse);
 </script>
 </body>
-</html>
