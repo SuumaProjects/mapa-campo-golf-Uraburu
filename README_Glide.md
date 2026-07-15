@@ -1,13 +1,18 @@
-# Mapa de campo Uraburu - ajuste final altura/popup
+# Mapa de Campo Uraburu - index corregido
 
-Este paquete contiene el `index.html` para GitHub Pages con las coordenadas corregidas de Uraburu y el ajuste solicitado:
+Este paquete se ha generado a partir del index base aportado por el usuario.
 
-- Altura del mapa reducida: `height: 650px; max-height: calc(100dvh - 175px);`
-- Popup inferior anclado al borde inferior del mapa: `.panel { position: absolute; bottom: 10px; }`
-- En móvil se mantiene la misma lógica para evitar que el popup quede fuera de pantalla.
+Cambios realizados:
+- Sustituidas las coordenadas de los hoyos H1-H18 por las nuevas coordenadas de Uraburu.
+- Sustituido el WC por un unico punto WC.
+- Sustituida Casa Club por la coordenada indicada.
+- Sustituido Campo de Practicas por la coordenada indicada.
+- Eliminado el punto STARTER / SP.
+- Eliminado el segundo WC anterior.
+- Se mantiene la configuracion visual, altura, popup y CSS del archivo index original aportado.
 
-URL de prueba:
-`https://suumaprojects.github.io/mapa-campo-golf-Uraburu/?lang=es&v=uraburu10`
+URL de prueba sugerida:
+https://suumaprojects.github.io/mapa-campo-golf-Uraburu/?lang=es&v=uraburu11
 
-URL Glide:
-`https://suumaprojects.github.io/mapa-campo-golf-Uraburu/?lang=User_Language&v=uraburu10`
+URL Glide sugerida:
+https://suumaprojects.github.io/mapa-campo-golf-Uraburu/?lang=User_Language&v=uraburu11
