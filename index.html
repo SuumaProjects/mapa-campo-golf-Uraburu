@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- ReadyStroke MAP Uraburu - version mobile-meaztegi-base1: base visual móvil usada en Meaztegi -->
+<!-- ReadyStroke MAP Meaztegi - version popup-safe1: panel inferior visible por encima del menú Glide -->
 <html lang="es">
 <head>
   <meta charset="utf-8" />
@@ -22,6 +22,8 @@
       --clubhouse-light: #c2410c;
       --practice: #1d4ed8;
       --practice-light: #60a5fa;
+      --starter: #6d28d9;
+      --starter-light: #a78bfa;
     }
 
     html, body {
@@ -47,7 +49,7 @@
 
     #map {
       width: 100%;
-      height: 78dvh;
+      height: 100dvh;
       min-height: 0;
       background: #d7d3c8;
     }
@@ -106,7 +108,7 @@
       position: fixed;
       left: 10px;
       right: 10px;
-      bottom: calc(24px + env(safe-area-inset-bottom));
+      bottom: calc(40px + env(safe-area-inset-bottom));
       z-index: 1000;
       background: var(--card);
       border: 1px solid rgba(255,255,255,.78);
@@ -209,6 +211,7 @@
     .dot.featured { background: var(--accent-dark); }
     .dot.clubhouse { background: var(--clubhouse); }
     .dot.practice { background: var(--practice); }
+    .dot.starter { background: var(--starter); }
 
     .pin {
       width: 31px;
@@ -261,6 +264,15 @@
       border: 3px solid white;
     }
 
+    .pin.starter {
+      width: 36px;
+      height: 36px;
+      font-size: 9px;
+      background: radial-gradient(circle at 35% 28%, var(--starter-light), var(--starter) 72%);
+      color: #fff;
+      border: 3px solid white;
+    }
+
     .leaflet-control-zoom {
       margin-top: 78px !important;
       border: 0 !important;
@@ -283,7 +295,7 @@
       .eyebrow { font-size: 9px; margin-bottom: 1px; }
       .top-title { font-size: 18px; }
       .top-subtitle { font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-      .panel { bottom: calc(82px + env(safe-area-inset-bottom)); left: 10px; right: 10px; }
+      .panel { bottom: calc(36px + env(safe-area-inset-bottom)); left: 10px; right: 10px; }
       .panel-inner { padding: 8px 11px 9px; gap: 5px; }
       .nearest-title { font-size: 16px; }
       .nearest-desc { display: none; }
@@ -328,6 +340,7 @@
         <span><i class="dot tee"></i> <span id="legendHoles">Hoyos</span></span>
         <span><i class="dot clubhouse"></i> <span id="legendClubhouse">Casa Club</span></span>
         <span><i class="dot practice"></i> <span id="legendPractice">Campo de prácticas</span></span>
+        <span><i class="dot starter"></i> <span id="legendStarter">Starter-Proshop</span></span>
         <span><i class="dot wc"></i> <span id="legendServices">Servicios</span></span>
       </div>
     </div>
@@ -339,155 +352,163 @@ const POINTS = [
     "hole": 1,
     "type": "TEE",
     "label": "H1",
-    "lat": 43.25035260949809,
-    "lng": -2.8381257955666372
+    "lat": 43.28818135872605,
+    "lng": -3.0639255733420936
   },
   {
     "hole": 2,
     "type": "TEE",
     "label": "H2",
-    "lat": 43.2489310656639,
-    "lng": -2.840065337749178
+    "lat": 43.288887967338106,
+    "lng": -3.068336341879104
   },
   {
     "hole": 3,
     "type": "TEE",
     "label": "H3",
-    "lat": 43.24956590068041,
-    "lng": -2.8412859874033587
+    "lat": 43.289730283560395,
+    "lng": -3.0753523832107734
   },
   {
     "hole": 4,
     "type": "TEE",
     "label": "H4",
-    "lat": 43.24999026303395,
-    "lng": -2.8451935346697534
+    "lat": 43.29149177057084,
+    "lng": -3.0745178968376017
   },
   {
     "hole": 5,
     "type": "TEE",
     "label": "H5",
-    "lat": 43.250447546734826,
-    "lng": -2.8400378826461066
+    "lat": 43.289730306939894,
+    "lng": -3.0701073848485914
   },
   {
     "hole": 6,
     "type": "TEE",
     "label": "H6",
-    "lat": 43.25110602924869,
-    "lng": -2.845170933172965
+    "lat": 43.29273420084808,
+    "lng": -3.0743153319540055
   },
   {
     "hole": 7,
     "type": "TEE",
     "label": "H7",
-    "lat": 43.25188888251861,
-    "lng": -2.8449298505780836
+    "lat": 43.29080960265295,
+    "lng": -3.0701857099154117
   },
   {
     "hole": 8,
     "type": "TEE",
     "label": "H8",
-    "lat": 43.253893526325655,
-    "lng": -2.845979564460534
+    "lat": 43.29016674577595,
+    "lng": -3.0662532509668576
   },
   {
     "hole": 9,
     "type": "TEE",
     "label": "H9",
-    "lat": 43.2526131957403,
-    "lng": -2.843664166872169
+    "lat": 43.29152519071072,
+    "lng": -3.0649703402221053
   },
   {
     "hole": 10,
     "type": "TEE",
     "label": "H10",
-    "lat": 43.249587231017244,
-    "lng": -2.8330092579265123
+    "lat": 43.28877455631997,
+    "lng": -3.06264027175183
   },
   {
     "hole": 11,
     "type": "TEE",
     "label": "H11",
-    "lat": 43.24776745602338,
-    "lng": -2.829037305511522
+    "lat": 43.290440582498015,
+    "lng": -3.0638039855048844
   },
   {
     "hole": 12,
     "type": "TEE",
     "label": "H12",
-    "lat": 43.24485932282394,
-    "lng": -2.822925149492033
+    "lat": 43.29278699256596,
+    "lng": -3.0647939694769937
   },
   {
     "hole": 13,
     "type": "TEE",
     "label": "H13",
-    "lat": 43.24286314653905,
-    "lng": -2.822620668628631
+    "lat": 43.292060397925944,
+    "lng": -3.068356808750564
   },
   {
     "hole": 14,
     "type": "TEE",
     "label": "H14",
-    "lat": 43.24505776809765,
-    "lng": -2.821539174195871
+    "lat": 43.29321916352998,
+    "lng": -3.067957721406423
   },
   {
     "hole": 15,
     "type": "TEE",
     "label": "H15",
-    "lat": 43.24329958403818,
-    "lng": -2.824061168431941
+    "lat": 43.29259631249966,
+    "lng": -3.07179279767484
   },
   {
     "hole": 16,
     "type": "TEE",
     "label": "H16",
-    "lat": 43.245256079370485,
-    "lng": -2.8265566547547194
+    "lat": 43.29535810444776,
+    "lng": -3.0690296669376984
   },
   {
     "hole": 17,
     "type": "TEE",
     "label": "H17",
-    "lat": 43.24394279744801,
-    "lng": -2.8299848824017344
+    "lat": 43.292995969644124,
+    "lng": -3.067937162949651
   },
   {
     "hole": 18,
     "type": "TEE",
     "label": "H18",
-    "lat": 43.24583882281844,
-    "lng": -2.8273300859543053
+    "lat": 43.29026350301895,
+    "lng": -3.069931578262425
   },
   {
     "hole": null,
-    "type": "CLUBHOUSE",
-    "label": "CC",
-    "lat": 43.251192179108045,
-    "lng": -2.837784226890077
+    "type": "WC",
+    "label": "WC",
+    "lat": 43.29070540918871,
+    "lng": -3.071468620618843
+  },
+  {
+    "hole": null,
+    "type": "WC",
+    "label": "WC",
+    "lat": 43.29350619161069,
+    "lng": -3.067870692575003
   },
   {
     "hole": null,
     "type": "PRACTICE",
     "label": "CP",
-    "lat": 43.250228303520785,
-    "lng": -2.836705944921963
+    "lat": 43.28695987256295,
+    "lng": -3.063390873081765
   },
   {
     "hole": null,
-    "type": "WC",
-    "label": "WC",
-    "lat": 43.251302123591074,
-    "lng": -2.845175194124546
-  },
+    "type": "CLUBHOUSE",
+    "label": "CC",
+    "lat": 43.288200313743914,
+    "lng": -3.0630516343486187
+  }
+,
   {
     "hole": null,
-    "type": "WC",
-    "label": "WC",
-    "lat": 43.24449228084935,
-    "lng": -2.822544195052172
+    "type": "STARTER",
+    "label": "SP",
+    "lat": 43.28789789772124,
+    "lng": -3.063558965472141
   }
 ];
 
@@ -506,6 +527,7 @@ const TRANSLATIONS = {
     featured: 'Inicio vuelta',
     clubhouse: 'Casa Club',
     practice: 'Campo de prácticas',
+    starter: 'Starter-Proshop',
     serviceLabel: 'Servicio',
     referenceLabel: 'Referencia del campo',
     facilityLabel: 'Instalación',
@@ -516,6 +538,8 @@ const TRANSLATIONS = {
     clubhouseDesc: 'Punto principal de referencia del club.',
     practiceTitle: 'Campo de prácticas',
     practiceDesc: 'Zona de entrenamiento y calentamiento.',
+    starterTitle: 'Starter-Proshop',
+    starterDesc: 'Punto de salida, atención al jugador y tienda del club.',
     firstLoopDesc: 'Salida del hoyo 1. Inicio de la primera vuelta.',
     secondLoopDesc: 'Salida del hoyo 10. Inicio de la segunda vuelta.',
     holeDesc: n => `Salida del hoyo ${n}.`,
@@ -534,6 +558,7 @@ const TRANSLATIONS = {
     featured: 'Loop start',
     clubhouse: 'Clubhouse',
     practice: 'Practice range',
+    starter: 'Starter-Proshop',
     serviceLabel: 'Service',
     referenceLabel: 'Course reference',
     facilityLabel: 'Facility',
@@ -544,6 +569,8 @@ const TRANSLATIONS = {
     clubhouseDesc: 'Main reference point of the club.',
     practiceTitle: 'Practice range',
     practiceDesc: 'Training and warm-up area.',
+    starterTitle: 'Starter-Proshop',
+    starterDesc: 'Starting point, player assistance and club shop.',
     firstLoopDesc: 'Tee of hole 1. Start of the front nine.',
     secondLoopDesc: 'Tee of hole 10. Start of the back nine.',
     holeDesc: n => `Tee of hole ${n}.`,
@@ -562,6 +589,7 @@ const TRANSLATIONS = {
     featured: 'Début de boucle',
     clubhouse: 'Club-house',
     practice: 'Practice',
+    starter: 'Starter-Proshop',
     serviceLabel: 'Service',
     referenceLabel: 'Référence du parcours',
     facilityLabel: 'Installation',
@@ -572,6 +600,8 @@ const TRANSLATIONS = {
     clubhouseDesc: 'Point de référence principal du club.',
     practiceTitle: 'Practice',
     practiceDesc: 'Zone d’entraînement et d’échauffement.',
+    starterTitle: 'Starter-Proshop',
+    starterDesc: 'Point de départ, accueil joueur et boutique du club.',
     firstLoopDesc: 'Départ du trou 1. Début de l’aller.',
     secondLoopDesc: 'Départ du trou 10. Début du retour.',
     holeDesc: n => `Départ du trou ${n}.`,
@@ -590,6 +620,7 @@ const TRANSLATIONS = {
     featured: 'Rundenstart',
     clubhouse: 'Clubhaus',
     practice: 'Übungsbereich',
+    starter: 'Starter-Proshop',
     serviceLabel: 'Service',
     referenceLabel: 'Platzreferenz',
     facilityLabel: 'Einrichtung',
@@ -600,6 +631,8 @@ const TRANSLATIONS = {
     clubhouseDesc: 'Wichtiger Bezugspunkt des Clubs.',
     practiceTitle: 'Übungsbereich',
     practiceDesc: 'Trainings- und Aufwärmbereich.',
+    starterTitle: 'Starter-Proshop',
+    starterDesc: 'Startpunkt, Spielerbetreuung und Proshop.',
     firstLoopDesc: 'Abschlag von Loch 1. Start der ersten Runde.',
     secondLoopDesc: 'Abschlag von Loch 10. Start der zweiten Runde.',
     holeDesc: n => `Abschlag von Loch ${n}.`,
@@ -618,6 +651,7 @@ const TRANSLATIONS = {
     featured: 'Itzuliaren hasiera',
     clubhouse: 'Klub etxea',
     practice: 'Praktika zelaia',
+    starter: 'Starter-Proshop',
     serviceLabel: 'Zerbitzua',
     referenceLabel: 'Zelaiaren erreferentzia',
     facilityLabel: 'Instalazioa',
@@ -628,6 +662,8 @@ const TRANSLATIONS = {
     clubhouseDesc: 'Klubeko erreferentzia-puntu nagusia.',
     practiceTitle: 'Praktika zelaia',
     practiceDesc: 'Entrenamendu eta beroketa gunea.',
+    starterTitle: 'Starter-Proshop',
+    starterDesc: 'Irteera puntua, jokalariaren arreta eta klubeko denda.',
     firstLoopDesc: '1. zuloaren irteera. Lehen itzuliaren hasiera.',
     secondLoopDesc: '10. zuloaren irteera. Bigarren itzuliaren hasiera.',
     holeDesc: n => `${n}. zuloaren irteera.`,
@@ -670,6 +706,7 @@ function applyLanguage() {
   setText('legendFeatured', T.featured);
   setText('legendClubhouse', T.clubhouse);
   setText('legendPractice', T.practice);
+  setText('legendStarter', T.starter);
 }
 
 const map = L.map('map', { zoomControl: false, attributionControl: true });
@@ -692,6 +729,7 @@ function markerClass(point) {
   if (point.type === 'WC') return 'wc';
   if (point.type === 'CLUBHOUSE') return 'clubhouse';
   if (point.type === 'PRACTICE') return 'practice';
+  if (point.type === 'STARTER') return 'starter';
   if (point.hole === 1 || point.hole === 10) return 'loop-start';
   return 'tee';
 }
@@ -702,7 +740,7 @@ function markerLabel(point) {
 
 function iconSize(point) {
   if (point.hole === 1 || point.hole === 10) return [38,38];
-  if (point.type === 'CLUBHOUSE' || point.type === 'PRACTICE') return [36,36];
+  if (point.type === 'CLUBHOUSE' || point.type === 'PRACTICE' || point.type === 'STARTER') return [36,36];
   return [31,31];
 }
 
@@ -724,6 +762,7 @@ function pointTitle(point) {
   if (point.type === 'WC') return T.wcTitle;
   if (point.type === 'CLUBHOUSE') return T.clubhouseTitle;
   if (point.type === 'PRACTICE') return T.practiceTitle;
+  if (point.type === 'STARTER') return T.starterTitle;
   return T.holeTitle(point.hole);
 }
 
@@ -731,6 +770,7 @@ function pointDescription(point) {
   if (point.type === 'WC') return T.wcDesc;
   if (point.type === 'CLUBHOUSE') return T.clubhouseDesc;
   if (point.type === 'PRACTICE') return T.practiceDesc;
+  if (point.type === 'STARTER') return T.starterDesc;
   if (point.hole === 1) return T.firstLoopDesc;
   if (point.hole === 10) return T.secondLoopDesc;
   return T.holeDesc(point.hole);
@@ -739,10 +779,10 @@ function pointDescription(point) {
 function setPanel(point) {
   selectedPoint = point;
   document.getElementById('navBtn').disabled = false;
-  document.getElementById('panelLabel').textContent = point.type === 'WC' ? T.serviceLabel : (point.type === 'CLUBHOUSE' || point.type === 'PRACTICE' ? T.facilityLabel : T.referenceLabel);
+  document.getElementById('panelLabel').textContent = point.type === 'WC' ? T.serviceLabel : (point.type === 'CLUBHOUSE' || point.type === 'PRACTICE' || point.type === 'STARTER' ? T.facilityLabel : T.referenceLabel);
   document.getElementById('nearestTitle').textContent = pointTitle(point);
   document.getElementById('nearestDesc').textContent = pointDescription(point);
-  document.getElementById('panelBadge').textContent = point.type === 'WC' ? 'WC' : (point.type === 'CLUBHOUSE' ? 'CC' : (point.type === 'PRACTICE' ? 'CP' : `H${point.hole}`));
+  document.getElementById('panelBadge').textContent = point.type === 'WC' ? 'WC' : (point.type === 'CLUBHOUSE' ? 'CC' : (point.type === 'PRACTICE' ? 'CP' : (point.type === 'STARTER' ? 'SP' : `H${point.hole}`)));
 }
 
 POINTS.forEach(point => {
