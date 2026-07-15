@@ -1,13 +1,23 @@
-# Mapa Campo Uraburu - ajuste popup inferior
+# Mapa Campo Uraburu - Glide + GitHub Pages
 
-Version con el mismo estilo visual de Meaztegi, pero con el panel inferior elevado para que no quede fuera de la zona visible del Web Embed en Glide móvil.
+Versión corregida con la configuración visual/altura validada en Glide y coordenadas actualizadas de Uraburu según datos facilitados.
 
-Cambios realizados:
-- `.panel bottom` general: `calc(170px + env(safe-area-inset-bottom))`
-- `.panel bottom` en móvil: `calc(155px + env(safe-area-inset-bottom))`
+Incluye:
+- H1-H18
+- 1 WC
+- Casa Club
+- Campo de Prácticas
 
-URL de prueba:
-https://suumaprojects.github.io/mapa-campo-golf-Uraburu/?lang=es&v=uraburu5
+Subir `index.html` a la raíz del repositorio GitHub Pages y usar en Glide:
 
-URL Glide:
-https://suumaprojects.github.io/mapa-campo-golf-Uraburu/?lang=User_Language&v=uraburu5
+```
+https://suumaprojects.github.io/mapa-campo-golf-Uraburu/?lang=User_Language&v=uraburu7
+```
+
+Para prueba directa:
+
+```
+https://suumaprojects.github.io/mapa-campo-golf-Uraburu/?lang=es&v=uraburu7
+```
+
+No usar `loc=User_Location` en la pantalla real para evitar parpadeo del Web Embed.
