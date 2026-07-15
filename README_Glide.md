@@ -1,35 +1,13 @@
-# Mapa de Campo Uraburu - Glide + GitHub Pages
+# Mapa Campo Uraburu - ajuste popup inferior
 
-## Archivos
-- `index.html`: archivo listo para subir a GitHub Pages.
+Version con el mismo estilo visual de Meaztegi, pero con el panel inferior elevado para que no quede fuera de la zona visible del Web Embed en Glide móvil.
 
-## Repositorio recomendado
-`mapa-campo-golf-uraburu`
+Cambios realizados:
+- `.panel bottom` general: `calc(170px + env(safe-area-inset-bottom))`
+- `.panel bottom` en móvil: `calc(155px + env(safe-area-inset-bottom))`
 
-## URL de prueba
-```text
-https://suumaprojects.github.io/mapa-campo-golf-uraburu/?lang=es&v=uraburu1
-```
+URL de prueba:
+https://suumaprojects.github.io/mapa-campo-golf-Uraburu/?lang=es&v=uraburu5
 
-## URL para Glide
-```text
-https://suumaprojects.github.io/mapa-campo-golf-uraburu/?lang=User_Language&v=uraburu1
-```
-
-## Configuracion en Glide
-- Usar Web Embed apuntando a la columna `URL_Mapa_Campo`.
-- En la Template Column usar `lang=User_Language`, sin llaves.
-- Replacement: `User_Language` -> columna real de idioma del usuario.
-- No usar `loc=User_Location` en la pantalla real para evitar recarga/parpadeo del iframe.
-
-## Puntos incluidos
-- H1-H18 como `TEE`.
-- H1 y H10 se destacaran automaticamente como inicio de vuelta.
-- 2 puntos `WC`.
-- Casa Club: `CLUBHOUSE`.
-- Campo de Practicas: `PRACTICE`.
-
-## Version
-`v=uraburu1`
-
-Cambiar el parametro `v=` cada vez que se actualice el `index.html` en GitHub para evitar cache.
+URL Glide:
+https://suumaprojects.github.io/mapa-campo-golf-Uraburu/?lang=User_Language&v=uraburu5
