@@ -1,0 +1,773 @@
+<!doctype html>
+<!-- ReadyStroke MAP Meaztegi - version popup-safe1: panel inferior visible por encima del menú Glide -->
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <style>
+    :root {
+      --ink: #111827;
+      --muted: #667085;
+      --card: rgba(255,255,255,.92);
+      --line: rgba(17,24,39,.12);
+      --shadow: 0 14px 40px rgba(0,0,0,.24);
+      --green: #0f5f46;
+      --green-2: #15a36a;
+      --wc: #1f2937;
+      --accent: #c78b2a;
+      --accent-dark: #8a5a00;
+      --clubhouse: #7c2d12;
+      --clubhouse-light: #c2410c;
+      --practice: #1d4ed8;
+      --practice-light: #60a5fa;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: #f6f4ef;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      overflow: hidden;
+    }
+
+
+    /* Leaflet structural fallback: evita teselas desordenadas si el CSS externo tarda o falla */
+    .leaflet-container { overflow: hidden; position: relative; }
+    .leaflet-pane, .leaflet-tile, .leaflet-marker-icon, .leaflet-marker-shadow, .leaflet-tile-container,
+    .leaflet-pane > svg, .leaflet-pane > canvas, .leaflet-zoom-box, .leaflet-image-layer,
+    .leaflet-layer { position: absolute; left: 0; top: 0; }
+    .leaflet-tile { user-select: none; -webkit-user-drag: none; }
+    .leaflet-marker-icon, .leaflet-marker-shadow { display: block; }
+    .leaflet-control { position: relative; z-index: 800; pointer-events: auto; }
+    .leaflet-top, .leaflet-bottom { position: absolute; z-index: 1000; pointer-events: none; }
+    .leaflet-top { top: 0; } .leaflet-right { right: 0; } .leaflet-bottom { bottom: 0; } .leaflet-left { left: 0; }
+
+    #map {
+      width: 100%;
+      height: 100dvh;
+      min-height: 0;
+      background: #d7d3c8;
+    }
+
+    .top-card {
+      position: fixed;
+      top: max(8px, env(safe-area-inset-top));
+      left: 10px;
+      right: 10px;
+      z-index: 1000;
+      background: linear-gradient(135deg, rgba(255,255,255,.96), rgba(255,255,255,.84));
+      border: 1px solid rgba(255,255,255,.75);
+      box-shadow: 0 10px 32px rgba(0,0,0,.20);
+      border-radius: 18px;
+      backdrop-filter: blur(12px);
+      padding: 9px 12px;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--green);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .10em;
+      font-weight: 900;
+      margin-bottom: 3px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--green);
+      box-shadow: 0 0 0 4px rgba(15,95,70,.18);
+    }
+
+    .top-title {
+      margin: 0;
+      font-size: 19px;
+      line-height: 1.05;
+      font-weight: 900;
+      letter-spacing: -.035em;
+    }
+
+    .top-subtitle {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.25;
+    }
+
+    .panel {
+      position: fixed;
+      left: 10px;
+      right: 10px;
+      bottom: calc(86px + env(safe-area-inset-bottom));
+      z-index: 1000;
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.78);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(14px);
+      max-height: 150px;
+    }
+
+    .panel-inner {
+      padding: 9px 12px 10px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .panel-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .nearest-label {
+      font-size: 9.5px;
+      text-transform: uppercase;
+      letter-spacing: .10em;
+      color: var(--muted);
+      font-weight: 900;
+    }
+
+    .nearest-title {
+      font-size: 16px;
+      font-weight: 900;
+      line-height: 1.1;
+      margin-top: 2px;
+    }
+
+    .nearest-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.25;
+      margin-top: 2px;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      height: 30px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: rgba(15,95,70,.10);
+      color: var(--green);
+      font-weight: 900;
+      font-size: 12px;
+      border: 1px solid rgba(15,95,70,.16);
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    button {
+      appearance: none;
+      border: 0;
+      border-radius: 12px;
+      padding: 8px 10px;
+      font-weight: 900;
+      font-size: 12px;
+      cursor: pointer;
+      letter-spacing: -.01em;
+    }
+
+    button:disabled { opacity: .45; cursor: not-allowed; }
+    .primary { background: var(--ink); color: white; }
+    .secondary { background: rgba(17,24,39,.08); color: var(--ink); }
+
+    .legend {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 10.5px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      padding-top: 6px;
+    }
+
+    .legend span { display: inline-flex; align-items: center; gap: 5px; }
+    .dot { width: 10px; height: 10px; border-radius: 999px; display: inline-block; }
+    .dot.tee { background: var(--green); }
+    .dot.wc { background: var(--wc); }
+    .dot.featured { background: var(--accent-dark); }
+    .dot.clubhouse { background: var(--clubhouse); }
+    .dot.practice { background: var(--practice); }
+
+    .pin {
+      width: 31px;
+      height: 31px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      color: white;
+      font-size: 10px;
+      font-weight: 950;
+      letter-spacing: -.04em;
+      border: 2px solid rgba(255,255,255,.96);
+      box-shadow: 0 5px 16px rgba(0,0,0,.32);
+      transform: translateZ(0);
+    }
+
+    .pin.tee {
+      background: radial-gradient(circle at 35% 28%, #2ed38e, var(--green) 66%);
+    }
+
+    .pin.wc {
+      background: radial-gradient(circle at 35% 28%, #475467, #111827 70%);
+      font-size: 9px;
+    }
+
+    .pin.loop-start {
+      width: 38px;
+      height: 38px;
+      font-size: 10px;
+      background: radial-gradient(circle at 35% 28%, #d7a84f, var(--accent-dark) 72%);
+      color: #fff;
+      border: 3px solid white;
+    }
+
+    .pin.clubhouse {
+      width: 36px;
+      height: 36px;
+      font-size: 10px;
+      background: radial-gradient(circle at 35% 28%, var(--clubhouse-light), var(--clubhouse) 72%);
+      color: #fff;
+      border: 3px solid white;
+    }
+
+    .pin.practice {
+      width: 36px;
+      height: 36px;
+      font-size: 10px;
+      background: radial-gradient(circle at 35% 28%, var(--practice-light), var(--practice) 72%);
+      color: #fff;
+      border: 3px solid white;
+    }
+
+    .leaflet-control-zoom {
+      margin-top: 78px !important;
+      border: 0 !important;
+      box-shadow: 0 6px 18px rgba(0,0,0,.22) !important;
+    }
+    .leaflet-control-zoom a {
+      background: rgba(255,255,255,.93) !important;
+      color: var(--ink) !important;
+      border: 0 !important;
+      font-weight: 900;
+    }
+
+    .leaflet-control-attribution {
+      font-size: 9px;
+      background: rgba(255,255,255,.64) !important;
+    }
+
+    @media (max-height: 720px), (max-width: 430px) {
+      .top-card { padding: 8px 11px; border-radius: 17px; }
+      .eyebrow { font-size: 9px; margin-bottom: 1px; }
+      .top-title { font-size: 18px; }
+      .top-subtitle { font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .panel { bottom: calc(82px + env(safe-area-inset-bottom)); left: 10px; right: 10px; }
+      .panel-inner { padding: 8px 11px 9px; gap: 5px; }
+      .nearest-title { font-size: 16px; }
+      .nearest-desc { display: none; }
+      .badge { height: 28px; min-width: 42px; font-size: 11px; }
+      .actions { grid-template-columns: 1fr 1fr; gap: 6px; }
+      button { padding: 7px 9px; font-size: 11.5px; border-radius: 11px; }
+      .legend { display: none; }
+      .leaflet-control-zoom { margin-top: 74px !important; }
+    }
+
+    @media (max-height: 590px) {
+      .top-card { display: none; }
+      .leaflet-control-zoom { margin-top: 10px !important; }
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <section class="top-card" aria-label="Map title">
+    <div class="eyebrow" id="topEyebrow">Mapa explicativo</div>
+    <h1 class="top-title" id="topTitle">Mapa del campo</h1>
+    <div class="top-subtitle" id="topSubtitle">Vista general de hoyos y servicios principales.</div>
+  </section>
+
+  <section class="panel" aria-label="Selected point information">
+    <div class="panel-inner">
+      <div class="panel-row">
+        <div>
+          <div class="nearest-label" id="panelLabel">Vista general</div>
+          <div class="nearest-title" id="nearestTitle">Mapa del campo</div>
+          <div class="nearest-desc" id="nearestDesc">Toca un hoyo o servicio para ver la referencia y abrir navegación.</div>
+        </div>
+        <div class="badge" id="panelBadge">18H</div>
+      </div>
+      <div class="actions">
+        <button class="primary" id="navBtn" disabled>Abrir navegación</button>
+        <button class="secondary" id="fitBtn">Ver campo</button>
+      </div>
+      <div class="legend">
+        <span><i class="dot featured"></i> <span id="legendFeatured">Inicio vuelta</span></span>
+        <span><i class="dot tee"></i> <span id="legendHoles">Hoyos</span></span>
+        <span><i class="dot clubhouse"></i> <span id="legendClubhouse">Casa Club</span></span>
+        <span><i class="dot practice"></i> <span id="legendPractice">Campo de prácticas</span></span>
+        <span><i class="dot wc"></i> <span id="legendServices">Servicios</span></span>
+      </div>
+    </div>
+  </section>
+
+<script>
+const POINTS = [
+  {
+    "hole": 1,
+    "type": "TEE",
+    "label": "H1",
+    "lat": 43.25035260949809,
+    "lng": -2.8381257955666372
+  },
+  {
+    "hole": 2,
+    "type": "TEE",
+    "label": "H2",
+    "lat": 43.2489310656639,
+    "lng": -2.840065337749178
+  },
+  {
+    "hole": 3,
+    "type": "TEE",
+    "label": "H3",
+    "lat": 43.24956590068041,
+    "lng": -2.8412859874033587
+  },
+  {
+    "hole": 4,
+    "type": "TEE",
+    "label": "H4",
+    "lat": 43.24999026303395,
+    "lng": -2.8451935346697534
+  },
+  {
+    "hole": 5,
+    "type": "TEE",
+    "label": "H5",
+    "lat": 43.250447546734826,
+    "lng": -2.8400378826461066
+  },
+  {
+    "hole": 6,
+    "type": "TEE",
+    "label": "H6",
+    "lat": 43.25110602924869,
+    "lng": -2.845170933172965
+  },
+  {
+    "hole": 7,
+    "type": "TEE",
+    "label": "H7",
+    "lat": 43.25188888251861,
+    "lng": -2.8449298505780836
+  },
+  {
+    "hole": 8,
+    "type": "TEE",
+    "label": "H8",
+    "lat": 43.253893526325655,
+    "lng": -2.845979564460534
+  },
+  {
+    "hole": 9,
+    "type": "TEE",
+    "label": "H9",
+    "lat": 43.2526131957403,
+    "lng": -2.843664166872169
+  },
+  {
+    "hole": 10,
+    "type": "TEE",
+    "label": "H10",
+    "lat": 43.249587231017244,
+    "lng": -2.8330092579265123
+  },
+  {
+    "hole": 11,
+    "type": "TEE",
+    "label": "H11",
+    "lat": 43.24776745602338,
+    "lng": -2.829037305511522
+  },
+  {
+    "hole": 12,
+    "type": "TEE",
+    "label": "H12",
+    "lat": 43.24485932282394,
+    "lng": -2.822925149492033
+  },
+  {
+    "hole": 13,
+    "type": "TEE",
+    "label": "H13",
+    "lat": 43.24286314653905,
+    "lng": -2.822620668628631
+  },
+  {
+    "hole": 14,
+    "type": "TEE",
+    "label": "H14",
+    "lat": 43.24505776809765,
+    "lng": -2.821539174195871
+  },
+  {
+    "hole": 15,
+    "type": "TEE",
+    "label": "H15",
+    "lat": 43.24329958403818,
+    "lng": -2.824061168431941
+  },
+  {
+    "hole": 16,
+    "type": "TEE",
+    "label": "H16",
+    "lat": 43.245256079370485,
+    "lng": -2.8265566547547194
+  },
+  {
+    "hole": 17,
+    "type": "TEE",
+    "label": "H17",
+    "lat": 43.24394279744801,
+    "lng": -2.8299848824017344
+  },
+  {
+    "hole": 18,
+    "type": "TEE",
+    "label": "H18",
+    "lat": 43.24583882281844,
+    "lng": -2.8273300859543053
+  },
+  {
+    "hole": null,
+    "type": "CLUBHOUSE",
+    "label": "CC",
+    "lat": 43.251192179108045,
+    "lng": -2.837784226890077
+  },
+  {
+    "hole": null,
+    "type": "PRACTICE",
+    "label": "CP",
+    "lat": 43.250228303520785,
+    "lng": -2.836705944921963
+  },
+  {
+    "hole": null,
+    "type": "WC",
+    "label": "WC",
+    "lat": 43.251302123591074,
+    "lng": -2.845175194124546
+  },
+  {
+    "hole": null,
+    "type": "WC",
+    "label": "WC",
+    "lat": 43.24449228084935,
+    "lng": -2.822544195052172
+  }
+];
+
+const TRANSLATIONS = {
+  es: {
+    topEyebrow: 'Mapa explicativo',
+    topTitle: 'Mapa del campo',
+    topSubtitle: 'Vista general de hoyos y servicios principales.',
+    initialLabel: 'Vista general',
+    initialTitle: 'Mapa del campo',
+    initialDesc: 'Toca un hoyo o servicio para ver la referencia y abrir navegación.',
+    nav: 'Abrir navegación',
+    fit: 'Ver campo',
+    holes: 'Hoyos',
+    services: 'Servicios',
+    featured: 'Inicio vuelta',
+    clubhouse: 'Casa Club',
+    practice: 'Campo de prácticas',
+    serviceLabel: 'Servicio',
+    referenceLabel: 'Referencia del campo',
+    facilityLabel: 'Instalación',
+    holeTitle: n => `Hoyo ${n}`,
+    wcTitle: 'Baños',
+    wcDesc: 'Servicio disponible en el campo.',
+    clubhouseTitle: 'Casa Club',
+    clubhouseDesc: 'Punto principal de referencia del club.',
+    practiceTitle: 'Campo de prácticas',
+    practiceDesc: 'Zona de entrenamiento y calentamiento.',
+    firstLoopDesc: 'Salida del hoyo 1. Inicio de la primera vuelta.',
+    secondLoopDesc: 'Salida del hoyo 10. Inicio de la segunda vuelta.',
+    holeDesc: n => `Salida del hoyo ${n}.`,
+  },
+  en: {
+    topEyebrow: 'Course guide',
+    topTitle: 'Course map',
+    topSubtitle: 'Overview of holes and key services.',
+    initialLabel: 'Overview',
+    initialTitle: 'Course map',
+    initialDesc: 'Tap a hole or service to view the reference and open navigation.',
+    nav: 'Open navigation',
+    fit: 'View course',
+    holes: 'Holes',
+    services: 'Services',
+    featured: 'Loop start',
+    clubhouse: 'Clubhouse',
+    practice: 'Practice range',
+    serviceLabel: 'Service',
+    referenceLabel: 'Course reference',
+    facilityLabel: 'Facility',
+    holeTitle: n => `Hole ${n}`,
+    wcTitle: 'Toilets',
+    wcDesc: 'Service available on the course.',
+    clubhouseTitle: 'Clubhouse',
+    clubhouseDesc: 'Main reference point of the club.',
+    practiceTitle: 'Practice range',
+    practiceDesc: 'Training and warm-up area.',
+    firstLoopDesc: 'Tee of hole 1. Start of the front nine.',
+    secondLoopDesc: 'Tee of hole 10. Start of the back nine.',
+    holeDesc: n => `Tee of hole ${n}.`,
+  },
+  fr: {
+    topEyebrow: 'Guide du parcours',
+    topTitle: 'Plan du parcours',
+    topSubtitle: 'Vue générale des trous et des principaux services.',
+    initialLabel: 'Vue générale',
+    initialTitle: 'Plan du parcours',
+    initialDesc: 'Touchez un trou ou un service pour voir la référence et ouvrir la navigation.',
+    nav: 'Ouvrir la navigation',
+    fit: 'Voir le parcours',
+    holes: 'Trous',
+    services: 'Services',
+    featured: 'Début de boucle',
+    clubhouse: 'Club-house',
+    practice: 'Practice',
+    serviceLabel: 'Service',
+    referenceLabel: 'Référence du parcours',
+    facilityLabel: 'Installation',
+    holeTitle: n => `Trou ${n}`,
+    wcTitle: 'Toilettes',
+    wcDesc: 'Service disponible sur le parcours.',
+    clubhouseTitle: 'Club-house',
+    clubhouseDesc: 'Point de référence principal du club.',
+    practiceTitle: 'Practice',
+    practiceDesc: 'Zone d’entraînement et d’échauffement.',
+    firstLoopDesc: 'Départ du trou 1. Début de l’aller.',
+    secondLoopDesc: 'Départ du trou 10. Début du retour.',
+    holeDesc: n => `Départ du trou ${n}.`,
+  },
+  de: {
+    topEyebrow: 'Platzübersicht',
+    topTitle: 'Golfplatzkarte',
+    topSubtitle: 'Übersicht der Löcher und wichtigsten Services.',
+    initialLabel: 'Übersicht',
+    initialTitle: 'Golfplatzkarte',
+    initialDesc: 'Tippen Sie auf ein Loch oder einen Service, um Details und Navigation zu öffnen.',
+    nav: 'Navigation öffnen',
+    fit: 'Platz anzeigen',
+    holes: 'Löcher',
+    services: 'Services',
+    featured: 'Rundenstart',
+    clubhouse: 'Clubhaus',
+    practice: 'Übungsbereich',
+    serviceLabel: 'Service',
+    referenceLabel: 'Platzreferenz',
+    facilityLabel: 'Einrichtung',
+    holeTitle: n => `Loch ${n}`,
+    wcTitle: 'WC',
+    wcDesc: 'Service auf dem Golfplatz verfügbar.',
+    clubhouseTitle: 'Clubhaus',
+    clubhouseDesc: 'Wichtiger Bezugspunkt des Clubs.',
+    practiceTitle: 'Übungsbereich',
+    practiceDesc: 'Trainings- und Aufwärmbereich.',
+    firstLoopDesc: 'Abschlag von Loch 1. Start der ersten Runde.',
+    secondLoopDesc: 'Abschlag von Loch 10. Start der zweiten Runde.',
+    holeDesc: n => `Abschlag von Loch ${n}.`,
+  },
+  eu: {
+    topEyebrow: 'Zelaiaren gida',
+    topTitle: 'Zelaiaren mapa',
+    topSubtitle: 'Zuloen eta zerbitzu nagusien ikuspegi orokorra.',
+    initialLabel: 'Ikuspegi orokorra',
+    initialTitle: 'Zelaiaren mapa',
+    initialDesc: 'Ukitu zulo bat edo zerbitzu bat erreferentzia ikusteko eta nabigazioa irekitzeko.',
+    nav: 'Ireki nabigazioa',
+    fit: 'Ikusi zelaia',
+    holes: 'Zuloak',
+    services: 'Zerbitzuak',
+    featured: 'Itzuliaren hasiera',
+    clubhouse: 'Klub etxea',
+    practice: 'Praktika zelaia',
+    serviceLabel: 'Zerbitzua',
+    referenceLabel: 'Zelaiaren erreferentzia',
+    facilityLabel: 'Instalazioa',
+    holeTitle: n => `${n}. zuloa`,
+    wcTitle: 'Komunak',
+    wcDesc: 'Zelaian erabilgarri dagoen zerbitzua.',
+    clubhouseTitle: 'Klub etxea',
+    clubhouseDesc: 'Klubeko erreferentzia-puntu nagusia.',
+    practiceTitle: 'Praktika zelaia',
+    practiceDesc: 'Entrenamendu eta beroketa gunea.',
+    firstLoopDesc: '1. zuloaren irteera. Lehen itzuliaren hasiera.',
+    secondLoopDesc: '10. zuloaren irteera. Bigarren itzuliaren hasiera.',
+    holeDesc: n => `${n}. zuloaren irteera.`,
+  }
+};
+
+function normalizeLang(raw) {
+  const value = String(raw || '').trim().toLowerCase();
+  if (!value) return 'es';
+  if (value.startsWith('en') || value.includes('english') || value.includes('inglés') || value.includes('ingles')) return 'en';
+  if (value.startsWith('fr') || value.includes('français') || value.includes('frances') || value.includes('francés')) return 'fr';
+  if (value.startsWith('de') || value.includes('german') || value.includes('alemán') || value.includes('aleman')) return 'de';
+  if (value.startsWith('eu') || value.includes('euskera') || value.includes('basque')) return 'eu';
+  if (value.startsWith('es') || value.includes('spanish') || value.includes('español') || value.includes('espanol')) return 'es';
+  return 'es';
+}
+
+const params = new URLSearchParams(window.location.search);
+const lang = normalizeLang(params.get('lang') || params.get('idioma') || params.get('locale'));
+const T = TRANSLATIONS[lang] || TRANSLATIONS.es;
+document.documentElement.lang = lang;
+document.title = T.topTitle;
+
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value;
+}
+
+function applyLanguage() {
+  setText('topEyebrow', T.topEyebrow);
+  setText('topTitle', T.topTitle);
+  setText('topSubtitle', T.topSubtitle);
+  setText('panelLabel', T.initialLabel);
+  setText('nearestTitle', T.initialTitle);
+  setText('nearestDesc', T.initialDesc);
+  setText('navBtn', T.nav);
+  setText('fitBtn', T.fit);
+  setText('legendHoles', T.holes);
+  setText('legendServices', T.services);
+  setText('legendFeatured', T.featured);
+  setText('legendClubhouse', T.clubhouse);
+  setText('legendPractice', T.practice);
+}
+
+const map = L.map('map', { zoomControl: false, attributionControl: true });
+L.control.zoom({ position: 'topright' }).addTo(map);
+
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+  maxZoom: 20,
+  attribution: 'Tiles © Esri'
+}).addTo(map);
+
+L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+  maxZoom: 20,
+  attribution: ''
+}).addTo(map);
+
+let selectedPoint = null;
+const markers = [];
+
+function markerClass(point) {
+  if (point.type === 'WC') return 'wc';
+  if (point.type === 'CLUBHOUSE') return 'clubhouse';
+  if (point.type === 'PRACTICE') return 'practice';
+  if (point.hole === 1 || point.hole === 10) return 'loop-start';
+  return 'tee';
+}
+
+function markerLabel(point) {
+  return point.label;
+}
+
+function iconSize(point) {
+  if (point.hole === 1 || point.hole === 10) return [38,38];
+  if (point.type === 'CLUBHOUSE' || point.type === 'PRACTICE') return [36,36];
+  return [31,31];
+}
+
+function divIcon(point) {
+  const size = iconSize(point);
+  return L.divIcon({
+    className: '',
+    html: `<div class="pin ${markerClass(point)}">${markerLabel(point)}</div>`,
+    iconSize: size,
+    iconAnchor: [size[0]/2, size[1]/2]
+  });
+}
+
+function navUrl(lat, lng) {
+  return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+}
+
+function pointTitle(point) {
+  if (point.type === 'WC') return T.wcTitle;
+  if (point.type === 'CLUBHOUSE') return T.clubhouseTitle;
+  if (point.type === 'PRACTICE') return T.practiceTitle;
+  return T.holeTitle(point.hole);
+}
+
+function pointDescription(point) {
+  if (point.type === 'WC') return T.wcDesc;
+  if (point.type === 'CLUBHOUSE') return T.clubhouseDesc;
+  if (point.type === 'PRACTICE') return T.practiceDesc;
+  if (point.hole === 1) return T.firstLoopDesc;
+  if (point.hole === 10) return T.secondLoopDesc;
+  return T.holeDesc(point.hole);
+}
+
+function setPanel(point) {
+  selectedPoint = point;
+  document.getElementById('navBtn').disabled = false;
+  document.getElementById('panelLabel').textContent = point.type === 'WC' ? T.serviceLabel : (point.type === 'CLUBHOUSE' || point.type === 'PRACTICE' ? T.facilityLabel : T.referenceLabel);
+  document.getElementById('nearestTitle').textContent = pointTitle(point);
+  document.getElementById('nearestDesc').textContent = pointDescription(point);
+  document.getElementById('panelBadge').textContent = point.type === 'WC' ? 'WC' : (point.type === 'CLUBHOUSE' ? 'CC' : (point.type === 'PRACTICE' ? 'CP' : `H${point.hole}`));
+}
+
+POINTS.forEach(point => {
+  const m = L.marker([point.lat, point.lng], { icon: divIcon(point), keyboard: false }).addTo(map);
+  m.on('click', () => {
+    setPanel(point);
+    map.panTo([point.lat, point.lng], { animate: true });
+  });
+  markers.push(m);
+});
+
+const group = L.featureGroup(markers);
+function fitCourse() {
+  map.fitBounds(group.getBounds().pad(0.20));
+}
+
+applyLanguage();
+fitCourse();
+
+document.getElementById('navBtn').addEventListener('click', () => {
+  if (!selectedPoint) return;
+  window.open(navUrl(selectedPoint.lat, selectedPoint.lng), '_blank', 'noopener');
+});
+
+document.getElementById('fitBtn').addEventListener('click', fitCourse);
+</script>
+</body>
+</html>
